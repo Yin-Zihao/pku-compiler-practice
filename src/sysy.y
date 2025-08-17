@@ -106,10 +106,11 @@ Block
 
 Stmt
   : RETURN Number ';' {
-    auto stmt = new StmtAST($2);  // $2 是 Number 返回的 int_val
+    // $2 是 Number 返回的 ast_val（BaseAST*），需转换为 NumberAST* 并提取 value
+    auto num_ast = static_cast<NumberAST*>(yyvsp[-1].ast_val);
+    auto stmt = new StmtAST(num_ast->value);  // 传递 int 类型参数
     $$ = stmt;
   }
-  ;
 
 Number
   : INT_CONST {
