@@ -43,7 +43,7 @@ using namespace std;
 
 // 非终结符的类型定义
 %type <ast_val> FuncDef FuncType Block Stmt  // FuncDef 等返回 AST 指针
-%type <int_val> Number                      // Number 仍返回整数值
+%type <ast_val> Number                      // Number 返回 AST 指针
 //lv1.3修改
 
 %%
