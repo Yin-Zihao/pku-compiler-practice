@@ -106,8 +106,7 @@ Block
 
 Stmt
   : RETURN Number ';' {
-    auto stmt = new StmtAST();
-    stmt->number = $2;  // 直接使用 int_val（无需 unique_ptr）
+    auto stmt = new StmtAST($2);  // $2 是 Number 返回的 int_val
     $$ = stmt;
   }
   ;

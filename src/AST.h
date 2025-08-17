@@ -80,3 +80,14 @@ class StmtAST : public BaseAST {
     std::cout << "StmtAST { " << number << " }";
   }
 };
+
+class NumberAST : public BaseAST {
+ public:
+  int value;
+
+  explicit NumberAST(int val) : value(val) {}
+
+  void Dump() const override {
+    std::cout << "NumberAST { " << value << " }";
+  }
+};
