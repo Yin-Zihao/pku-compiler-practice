@@ -10,6 +10,7 @@ class BaseAST {
  public:
   virtual ~BaseAST() = default;
   virtual void Dump() const = 0;  // 用于输出 AST 结构
+  virtual void GenIR(IRGenerator& generator) {}  // lv1.4新增
 };
 
 // CompUnit 是 BaseAST

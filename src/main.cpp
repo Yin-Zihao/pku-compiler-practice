@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 #include "AST.h"
+#include "IRGenerator.h"
 
 using namespace std;
 
@@ -32,5 +33,11 @@ int main(int argc, const char *argv[]) {
   auto ret = yyparse(ast);
   ast->Dump();  // 使用 Dump() 输出 AST 结构
   cout << endl;
+
+  // 生成IR文件
+    auto ir_output = std::string(argv[4]) + ".koopa";  // lv1.4新增
+    IRGenerator generator(ir_output);                  // lv1.4新增
+    generator.generateIR(ast);                         // lv1.4新增
+
   return 0;
 }
