@@ -33,8 +33,8 @@ void IRGenerator::visitFuncDefAST(FuncDefAST* node) {
 }
 
 void IRGenerator::visitBlockAST(BlockAST* node) {
-    if (node->stmt_) {
-        visitStmtAST(static_cast<StmtAST*>(node->stmt_.get()));
+    if (node->getStmt()) { // 使用getter方法
+        visitStmtAST(static_cast<StmtAST*>(node->getStmt().get()));
     }
 }
 

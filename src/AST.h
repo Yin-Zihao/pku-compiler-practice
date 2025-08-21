@@ -5,6 +5,8 @@
 #include <string>
 #include <iostream>
 
+class IRGenerator; // 前向声明IRGenerator类
+
 // 所有 AST 的基类
 class BaseAST {
  public:
@@ -58,6 +60,11 @@ class BlockAST : public BaseAST {
  public:
   explicit BlockAST(std::unique_ptr<BaseAST> stmt)
       : stmt_(std::move(stmt)) {}
+
+  // 新增公共getter方法
+  const std::unique_ptr<BaseAST>& getStmt() const {
+    return stmt_;
+  }
 
   void Dump() const override {
     std::cout << "BlockAST { ";
