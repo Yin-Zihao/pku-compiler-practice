@@ -35,7 +35,7 @@ int main(int argc, const char *argv[]) {
   cout << endl;
 
   // 生成IR文件
-    auto ir_output = std::string(argv[4]) + ".koopa";  // lv1.4新增
+    auto ir_output = std::string(argv[4]);  // lv1.4新增
     IRGenerator generator(ir_output);                  // lv1.4新增
     generator.generateIR(ast);                         // lv1.4新增
 
