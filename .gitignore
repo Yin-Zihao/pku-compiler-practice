@@ -2,3 +2,18 @@
 /build
 .vscode/
 debug/
+# 编译产物
+build/
+*.o
+*.exe
+*.dll
+*.so
+
+# IDE 配置文件
+*.sln
+*.vcxproj
+*.iml
+*.swp
+
+# 日志文件
+*.log
