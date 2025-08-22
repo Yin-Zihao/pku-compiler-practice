@@ -1,51 +1,64 @@
-# 基于 CMake 的 SysY 编译器项目模板
+# pku-compiler-practice README
+> English is not my native language; please excuse typing errors.
+## summarize
 
-该仓库中存放了一个基于 CMake 的 SysY 编译器项目的模板, 你可以在该模板的基础上进行进一步的开发.
+This project is a compiler learning project based on [the guidance of Peking University's online compilation practice document](https://pku-minic.github.io/online-doc/#/), aiming to record my learning route and the pit I stepped on. As the online documentation of Peking University's compilation practice is published by [CC BY-NC-SA 4.0 protocol](https://creativecommons.org/licenses/by-nc-sa/4.0/), this protocol is also used in this project.
+Due to my lack of knowledge, there should be many unreasonable points in the project structure and code, and I hope you will criticize and correct me.
 
-该仓库中的 C/C++ 代码实现仅作为演示, 不代表你的编译器必须以此方式实现. 如你需要使用该模板, 建议你删掉所有 C/C++ 源文件, 仅保留 `CMakeLists.txt` 和必要的目录结构, 然后重新开始实现.
+## 综述
+本项目是基于[北大编译实践在线文档](https://pku-minic.github.io/online-doc/#/)的指导进行的编译器学习项目，旨在记录本人的学习路线和踩过的坑。由于北大编译实践在线文档采用 [CC BY-NC-SA 4.0 协议](https://creativecommons.org/licenses/by-nc-sa/4.0/)发布，本项目亦沿用此协议。
+由于本人才疏学浅,项目结构与代码不合理之处应该颇多,还望各位大佬批评指正。
 
-该模板仅供不熟悉 CMake 的同学参考, 在理解基本原理的基础上, 你完全可以不使用模板完成编译器的实现. 如你决定不使用该模板并自行编写 CMake, 请参考 [“评测平台要求”](#评测平台要求) 部分.
-
-## 使用方法
-
-首先 clone 本仓库:
-
-```sh
-git clone https://github.com/pku-minic/sysy-cmake-template.git
+## Project structure(updated on August 22, 2025)
+```
+├── src/
+├── AST.h # abstract syntax tree base class and node definition
+├── IRGenerator.h # IR generator interface declaration
+├ ── irgenerator. CPP # Implementation of IR generator (AST ergodic logic)
+├── main.cpp # Compiler main program (parsing entry/command line processing)
+├── sysy.y # Bison grammar file (AST construction rules)
+└── sysy.l # Flex Lexical Definition (Generative Lexical Analyzer)
 ```
 
-在 [compiler-dev](https://github.com/pku-minic/compiler-dev) 环境内, 进入仓库目录后执行:
-
-```sh
-cd sysy-make-template
-cmake -DCMAKE_BUILD_TYPE=Debug -B build
-cmake --build build
+## 项目结构 （2025/08/22更新）
+```
+├── src/ 
+├── AST.h # 抽象语法树基类与节点定义 
+├── IRGenerator.h # IR生成器接口声明 
+├── IRGenerator.cpp # IR生成器实现（AST遍历逻辑） 
+├── main.cpp # 编译器主程序（解析入口/命令行处理） 
+├── sysy.y # Bison语法文件（AST构建规则）
+└── sysy.l # Flex 词法定义（生成词法分析器）
 ```
 
-CMake 将在 `build` 目录下生成名为 `compiler` 的可执行文件.
+## progress record
+### [Lv1. `main` function](https://pku-minic.github.io/online-doc/#/lv1-main/)(implemented on August 22, 2025)
+#### Project function
+-Support analytic function definition (`int main() { ... }`)
+-Support return statement parsing (`return 0;`)
+-Identify integer constants (`INT_CONST`) and identifiers (`IDENT`).
+-AST design and IR generation of the above structures
 
-如在此基础上进行开发, 你需要重新初始化 Git 仓库:
+#### Step on pit points in this chapter
+- Only the definition and implementation of line comments are given in the document.
+	sysy.l `LineComment   "//"[^\n]*`
+	sysy.l `{LineComment} {/* Ignore and do nothing */} `
+- But there will be a comment `/* */` during the evaluation, so we need to define it ourselves.
+	sysy.l `BlockComment   \/\*.*? \*\/`
+	sysy.l `{BlockComment} {/* Ignore and do nothing */} `
 
-```sh
-rm -rf .git
-git init
-```
+## 进度记录
+### [Lv1. `main` 函数](https://pku-minic.github.io/online-doc/#/lv1-main/?id=lv1-main-%e5%87%bd%e6%95%b0)（2025/08/22实现）
+#### 项目功能
+- 支持解析函数定义（`int main() { ... }`）
+- 支持返回语句解析（`return 0;`）
+- 识别整型常量（`INT_CONST`）和标识符（`IDENT`）
+- 以上结构的AST设计和IR生成
 
-然后, 根据情况修改 `CMakeLists.txt` 中的 `CPP_MODE` 参数. 如果你决定使用 C 语言进行开发, 你应该将其值改为 `OFF`.
-
-最后, 将自己的编译器的源文件放入 `src` 目录.
-
-## 测试要求
-
-当你提交一个根目录包含 `CMakeLists.txt` 文件的仓库时, 测试脚本/评测平台会使用如下命令编译你的编译器:
-
-```sh
-cmake -S "repo目录" -B "build目录" -DLIB_DIR="libkoopa目录" -DINC_DIR="libkoopa头文件目录"
-cmake --build "build目录" -j `nproc`
-```
-
-你的 `CMakeLists.txt` 必须将可执行文件直接输出到所指定的 build 目录的根目录, 且将其命名为 `compiler`.
-
-如需链接 `libkoopa`, 你的 `CMakeLists.txt` 应当处理 `LIB_DIR` 和 `INC_DIR`.
-
-模板中的 `CMakeLists.txt` 已经处理了上述内容, 你无需额外关心.
+#### 本章节踩坑点
+- 文档中只给出了行注释的定义及实现
+	sysy.l  `LineComment   "//"[^\n]*`
+	sysy.l  `{LineComment}   { /* 忽略, 不做任何操作 */ }`
+- 但是在测评时会有块注释 `/**/` 出现，这时需要我们自己定义
+	sysy.l `BlockComment   \/\*.*?\*\/`
+	sysy.l `{BlockComment}  { /* 忽略, 不做任何操作 */ }`

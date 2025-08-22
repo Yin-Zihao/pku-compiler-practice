@@ -15,7 +15,6 @@ class BaseAST {
   virtual void GenIR(IRGenerator& generator) {}  // lv1.4新增
 };
 
-// CompUnit 是 BaseAST
 class CompUnitAST : public BaseAST {
  public:
   // 用智能指针管理对象
