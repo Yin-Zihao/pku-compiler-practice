@@ -5,6 +5,7 @@
 #include <string>
 #include "AST.h"
 #include "IRGenerator.h"
+#include "KoopaIRConverter.h"
 
 using namespace std;
 
@@ -38,6 +39,13 @@ int main(int argc, const char *argv[]) {
     auto ir_output = std::string(argv[4]);  // lv1.4新增
     IRGenerator generator(ir_output);                  // lv1.4新增
     generator.generateIR(ast);                         // lv1.4新增
+
+  // lv2.1新增：读取生成的IR文件并转换
+    std::ifstream ir_file(ir_output);
+    std::string ir_str((std::istreambuf_iterator<char>(ir_file)),std::istreambuf_iterator<char>());
+    
+    // 转换为内存形式的Koopa IR
+    koopa_raw_program_t raw_program = KoopaIRConverter::ConvertToRawProgram(ir_str);
 
   return 0;
 }
